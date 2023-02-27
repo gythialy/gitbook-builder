@@ -1,0 +1,39 @@
+name: Build ebooks
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    # - uses: actions/checkout@v3
+    #   with:
+    #     repository: rootsongjc/kubernetes-handbook
+    #     path: 'rootsongjc-kubernetes-handbook'
+    #     fetch-depth: 1
+    - uses: actions/checkout@v3
+      with:
+        repository: feiskyer/kubernetes-handbook
+        path: 'feiskyer-kubernetes-handbook'
+        fetch-depth: 1
+    - name: Build ebooks
+      env:
+        BOOK_NAME: rootsongjc-kubernetes-handbook
+      run: |
+        # docker run --rm -v $(pwd)/rootsongjc-kubernetes-handbook:/books ghcr.io/gythialy/gitbook-builder:latest bash -c "npm i -g gitbook-cli && gitbook install && gitbook epub . ${{ env.BOOK_NAME }}.epub && gitbook mobi . ${{ env.BOOK_NAME }}.mobi"
+        docker run --rm -v $(pwd)/feiskyer-kubernetes-handbook:/books ghcr.io/gythialy/gitbook-builder:latest bash -c "make install && make pdf && make epub && make mobi"
+    - uses: actions/upload-artifact@v3
+      with:
+        name: kubernetes-handbook-books
+        path: |
+          *-kubernetes-handbook/*.pdf
+          *-kubernetes-handbook/*.epub
+          *-kubernetes-handbook/*.mobi
+        retention-days: 7

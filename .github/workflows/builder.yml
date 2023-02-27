@@ -1,4 +1,4 @@
-name: Build golang-cross-builder
+name: Build gitbook-builder
 
 on:
   push:
