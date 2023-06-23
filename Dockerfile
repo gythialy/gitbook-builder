@@ -1,4 +1,4 @@
-FROM node:12.11.1-slim
+FROM node:20.3.1-slim
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends build-essential git procps openssh-client git bzip2 graphviz calibre fonts-noto fonts-noto-cjk locales-all && \
